@@ -13,8 +13,6 @@ Feature Extraction: Converting images into Histogram of Oriented Gradients (HOG)
 🚀 Usage Instructions
 Run the scripts in the following order:
 
-Bash
-
 # Step 1: Clean the raw data
 python src/clean.py
 
