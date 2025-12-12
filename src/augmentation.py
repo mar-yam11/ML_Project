@@ -46,7 +46,7 @@ def augment_class_folder(folder, output, class_count):
     current_files = list_images(output)
     current_len = len(current_files)
     if current_len == 0:
-        print(f"Warning: no valid images in {folder}. Skipping augmentation for this class.")
+        print(f"Warning: no valid images in {folder}.")
         return 0
     idx = 0
     while current_len < class_count:

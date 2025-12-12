@@ -22,7 +22,7 @@ def is_image_valid(img_path):
             return True
             
     except (IOError, SyntaxError, UnidentifiedImageError):
-        print(f"Corrupt image found: {img_path}") 
+        print(f"Corrupted image found: {img_path}") 
         return False
         
     return False
