@@ -13,3 +13,6 @@ __pycache__/
 *.pyc
 .DS_Store
 .vscode/
+
+# 4. Virtual Environments
+venv/
