@@ -1,107 +1,71 @@
-📂 Data Processing Pipeline - Material Stream Identification
-This directory contains the data preprocessing pipeline for the Material Stream Identification project. The pipeline is designed to transform raw images into numerical feature vectors suitable for Machine Learning classifiers (SVM & k-NN).
+📦 Material Stream Identification (Simple Student Version)
 
-🛠️ Pipeline Overview
-The pipeline consists of three sequential stages:
+Very simple pipeline: clean → augment → train → evaluate → realtime.
 
-Data Cleaning: Removing corrupt files and standardizing image formats.
+Quick Start
 
-Data Augmentation & Balancing: Increasing the dataset size (≥30%) and balancing class distributions using geometric and photometric transformations.
+1) Setup (Windows)
 
-Feature Extraction: Converting images into Histogram of Oriented Gradients (HOG) feature vectors.
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-🚀 Usage Instructions
-Run the scripts in the following order:
+2) Prepare Data
 
-# Step 1: Clean the raw data
-python src/clean.py
+```bash
+# Put class folders under data/raw/ (glass, paper, cardboard, plastic, metal, trash)
 
-# Step 2: Augment and balance the dataset
-python src/augmentation.py
+# Clean corrupt images → data/cleaned/
+python -m src.clean
 
-# Step 3: Extract features (HOG)
-python src/extraction.py
-🔍 Detailed Methodology
-1. Data Cleaning (clean.py)
-Input: data/raw
+# Augment & balance (≈600 per class) → data/augmented/
+python -m src.augmentation
+```
 
-Output: data/cleaned
+3) Train Models (SVM + k-NN)
 
-Process:
+```bash
+# Combined HOG + Color features
+python -m src.train --data-dir data/augmented --feature-type hog_color
+```
 
-Iterates through all class folders.
+This saves artifacts in models/: scaler.joblib, svm_model.joblib, knn_model.joblib, class_map.json
 
-Verifies image integrity using PIL.Image.verify() to detect and skip corrupt files.
+4) Evaluate (Notebook)
 
-Converts all images to RGB mode to handle consistent channel depth.
+- Open notebooks/evaluation.ipynb and run all cells.
+- It shows accuracy, confusion matrices, and Unknown rejection.
 
-Saves validated images in standard JPEG format.
+5) Realtime App (Webcam)
 
-2. Data Augmentation & Balancing (augmentation.py)
-Input: data/cleaned
+```bash
+# Use SVM (default)
+python -m src.app_realtime --models-dir models --threshold 0.6
 
-Output: data/augmented
+# Or use k-NN
+python -m src.app_realtime --models-dir models --threshold 0.6 --use-knn
+```
 
-Goal: To achieve class balance (target: 600 images per class) and improve model generalization.
+- If confidence < threshold → label is "Unknown".
 
-Techniques Used:
+6) Make Submission Zip (simple)
 
-Geometric Transformations:
+```bash
+python scripts/make_submission.py --ta Ahmed --group G5 --ids 202001 202002 202003
+```
 
-RandomRotation(30): Simulates objects dropped at different angles.
+Files Included
 
-RandomHorizontalFlip & RandomVerticalFlip: Accounts for orientation invariance of waste items.
+- src/: code (clean, augmentation, features, train, predict, realtime app)
+- data/: raw, cleaned, augmented (created by scripts)
+- models/: saved scaler and models (after training)
+- notebooks/evaluation.ipynb: quick comparison and rejection
+- docs/REPORT.md: fill and export to PDF
+- scripts/make_submission.py: packs zip
 
-Photometric Transformations:
+Notes
 
-ColorJitter (Brightness, Contrast, Saturation, Hue): Simulates varying lighting conditions in the sorting facility.
-
-Resizing: All images are resized to 64x64 pixels to reduce computational load.
-
-Logic: The script first copies valid original images, then generates augmented versions until the class count reaches 600.
-
-3. Feature Extraction (extraction.py)
-Input: data/augmented
-
-Output: data/features/data.npz
-
-Method: Histogram of Oriented Gradients (HOG).
-
-Preprocessing:
-
-Images are converted to Grayscale (color is less critical for shape-based classification).
-
-Images are resized to 64x64 (consistent with augmentation step).
-
-HOG Parameters:
-
-orientations: 9
-
-pixels_per_cell: (8, 8)
-
-cells_per_block: (2, 2)
-
-block_norm: 'L2-Hys' (Normalization for robustness against illumination changes).
-
-Final Output Structure: The output is a compressed NumPy file (data.npz) containing:
-
-X: Feature matrix (Shape: [n_samples, feature_vector_size]).
-
-y: Label vector (Shape: [n_samples]).
-
-class_map: Dictionary mapping class indices to names (e.g., {0: 'glass', 1: 'paper'}).
-
-📁 Directory Structure
-Plaintext
-
-Project/
-├── data/
-│   ├── raw/            # Original dataset
-│   ├── cleaned/        # Validated images
-│   ├── augmented/      # Balanced dataset (600 imgs/class)
-│   └── features/       # Final .npz file
-├── src/
-│   ├── clean.py
-│   ├── augmentation.py
-│   └── extraction.py
-└── README.md
+- Keep it simple. You can tune: `--feature-type`, `--svm-c`, `--svm-kernel`, `--knn-k`, and rejection threshold.
+- Unknown class is handled by thresholding max probability. Map it to class 6 in your final app/report.
