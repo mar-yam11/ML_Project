@@ -16,8 +16,7 @@ pip install -r requirements.txt
 First, create the feature datasets from the augmented images:
 
 ```bash
-cd d:\EDUCATION\FCAI\Fourth-Year\ML\Project\ML_Project
-python -m src.datasets.build_datasets
+python -m src.models.build_datasets
 ```
 
 This will generate:
@@ -39,9 +38,6 @@ This will generate:
 
 - `models/svm_model.joblib` - Trained SVM model
 - `models/knn_model.joblib` - Trained KNN model
-- `models/scaler.joblib` - Feature scaler
-- `models/feature_config.json` - Feature configuration
-- `models/class_map.json` - Class mapping
 
 ## Output
 
