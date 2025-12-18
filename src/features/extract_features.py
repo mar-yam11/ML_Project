@@ -1,24 +1,28 @@
 import cv2
 import numpy as np
-from skimage.feature import hog
+from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
+from tensorflow.keras.models import Model
+
+# load pretrained CNN once
+base_model = MobileNetV2(
+    weights="imagenet",
+    include_top=False,
+    pooling="avg",
+    input_shape=(224, 224, 3)
+)
 
 def extract_features(image):
-    image = cv2.resize(image, (128, 128))
+    # resize to CNN input size
+    image = cv2.resize(image, (224, 224))
 
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # convert BGR to RGB
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    # HOG features
-    hog_features = hog(
-        gray,
-        orientations=9,
-        pixels_per_cell=(8, 8),
-        cells_per_block=(2, 2)
-    )
+    # prepare image for CNN
+    image = np.expand_dims(image, axis=0)
+    image = preprocess_input(image)
 
-    # color histogram
-    hist = cv2.calcHist([image], [0, 1, 2], None, [8, 8, 8], [0, 256]*3)
-    hist = cv2.normalize(hist, hist).flatten()
+    # extract features
+    features = base_model.predict(image, verbose=0)
 
-    features = np.concatenate((hog_features, hist))
-
-    return features
+    return features.flatten()
