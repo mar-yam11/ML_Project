@@ -22,7 +22,7 @@ A simple threshold-based rejection mechanism was used to classify uncertain inpu
 
 ## 6. Results
 
-The SVM classifier achieved approximately 56% validation accuracy, while the k-NN classifier achieved around 49%.
+The SVM classifier achieved approximately 78% validation accuracy, while the k-NN classifier achieved around 77%.
 
 ## 7. Real-Time System
 
