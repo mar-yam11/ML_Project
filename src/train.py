@@ -24,6 +24,14 @@ def train_and_evaluate(
     knn_k: int = 7,
     knn_weights: str = 'distance',
 ):
+    data_dir = Path(data_dir)
+    if not data_dir.exists():
+        fallback = Path('data/cleaned')
+        if fallback.exists():
+            print(f"Warning: {data_dir} not found. Using {fallback} instead.")
+            data_dir = fallback
+        else:
+            raise RuntimeError(f"Data not found at {data_dir} or {fallback}. Run clean.py and augmentation.py first.")
     X, y, class_map = extract_dataset_features(data_dir, feature_type=feature_type)
     if len(X) == 0:
         raise RuntimeError(f"No images/features found under {data_dir}")
