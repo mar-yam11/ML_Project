@@ -1,0 +1,2 @@
+SVM Accuracy ≈ 0.56
+kNN Accuracy ≈ 0.49
