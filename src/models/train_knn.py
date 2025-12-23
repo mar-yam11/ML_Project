@@ -6,8 +6,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
 
-X = np.load("models/X.npy")
-y = np.load("models/y.npy")
+X = np.load("src/models/X.npy")
+y = np.load("src/models/y.npy")
 
 X_train, X_val, y_train, y_val = train_test_split(
     X, y, test_size=0.2, random_state=42
