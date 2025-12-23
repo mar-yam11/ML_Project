@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
-from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
-from tensorflow.keras.models import Model
+from keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
+import tensorflow as tf
+from tensorflow import keras
+
+model = tf.keras.models.Sequential()
 
 # load pretrained CNN once
 base_model = MobileNetV2(
