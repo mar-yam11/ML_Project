@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score
 
  # Load precomputed feature matrix X and labels y
 X = np.load("src/models/X.npy")
- y = np.load("src/models/y.npy")
+y = np.load("src/models/y.npy")
 
  # Split data into training and validation sets
 X_train, X_val, y_train, y_val = train_test_split(
