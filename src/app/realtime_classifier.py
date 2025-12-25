@@ -44,17 +44,17 @@ while True:
 
     # Draw predicted label text on the frame
     cv2.putText(
-        frame,
-        label,
-        (20, 40),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        1,
-        (0, 255, 0),
-        2
+        frame,  # image to draw the text on
+        label,  # text string to render (predicted class name)
+        (20, 40),  # bottom-left corner of text baseline (x, y) in pixels
+        cv2.FONT_HERSHEY_SIMPLEX,  # font face used to render the text
+        1,  # font scale controlling text size (multiplier)
+        (0, 255, 0),  # text color in BGR format (green)
+        2  # thickness of the text strokes in pixels
     )
 
     # Show the annotated frame in a window
-    cv2.imshow("Material Classification", frame)
+    cv2.imshow("Material Classification", frame)  # window title; image data to display
 
     # Exit on 'q' key press
     if cv2.waitKey(1) & 0xFF == ord("q"):
